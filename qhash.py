@@ -53,8 +53,10 @@ def start_qhash(data):
     n_qubits = 4
     x, y, x1, y1 = 3.14159265359, 0, 0, 3.14159265359
     try:
+        # Convert character into ASCII value 8 bit long
+        ascii_val = ord(data)
         # Convert integer input to an 8-bit binary string
-        bit_string = bin(int(data))[2:].zfill(8)
+        bit_string = bin(int(ascii_val))[2:].zfill(8)
         hash_value = angle_encoding_hash_8bit(n_qubits, bit_string, x, y, x1, y1)
         hash_bit_string = bin(hash_value)[2:].zfill(8)  # Assuming the hash fits within n_qubits bits
         return hash_bit_string

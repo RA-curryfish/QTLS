@@ -6,7 +6,7 @@ import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
 delim = "::::"
-bad_data = '42'
+bad_data = "Bad"
 
 class QPacket:
     
@@ -17,7 +17,9 @@ class QPacket:
     def GenerateQMAC(self):
         # Do quantum stuff with the data here
         # Convert self.data to binary, apply quantum hashing and store in QMAC
-        qmac = qhash.start_qhash(self.data)
+        qmac = ""
+        for char in self.data:
+            qmac += str(qhash.start_qhash(char))
         return qmac
     
     def CombineDataQMAC(self):
@@ -55,12 +57,12 @@ def sender(dest_port=12345):
     #dest_port = 12346 to simulate MiTM, sender sends to the port the MiTM listens on, by default it is the acutal server's port
 
     # Craft the data to send
-    raw_data = input("Enter the integer data to send: ")
+    raw_data = input("Enter the message to send: ")
     qpacket = QPacket(raw_data)
     qpacket.QMAC = qpacket.GenerateQMAC() # generate MAC
     print(f"Sender generated QMAC: {qpacket.QMAC}")
     qpacket.Encrypt() # encrypt data
-    data = (qpacket.CombineDataQMAC()).encode() # combing and encode to send
+    data = (qpacket.CombineDataQMAC()).encode() # combining and encode to send
 
     try:
         sock.connect((dest_addr, dest_port))
